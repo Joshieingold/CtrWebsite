@@ -1,0 +1,46 @@
+.NavMain {
+    background-color: rgb(31, 31, 31);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 15vw;
+    justify-content: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.ctr-link-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 90%;
+    color: white;
+}
+.ctr-number-link {
+    color: white;
+    cursor: pointer;
+    background: rgb(56,56,56);
+    width: 75%;
+    height: 2rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.4rem;
+
+
+}
+.home-btn {
+    display: flex;
+    font-size: x-large;
+    justify-content: center;
+    align-items: center;
+    font-weight: 900;
+    display: flex;
+    text-align: center;
+    margin-bottom: 2vh;
+}
+

@@ -1,0 +1,30 @@
+.CtrHeaderMain {
+    display: flex;
+    flex-direction: column;
+    width: 85vw;
+    margin-left: 15vw;
+    justify-content: flex-start;
+    align-self: center;
+    text-align: center;
+    
+}
+.InformationContainer {
+    display: flex;
+    justify-content: space-around;
+    background-color: black;
+    text-align: center;
+    align-items: center;
+    height: 4rem;
+
+    
+}
+.InformationBubble {
+    background-color: red;
+    width: 10rem;
+    height: 4rem;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.5rem;
+}
