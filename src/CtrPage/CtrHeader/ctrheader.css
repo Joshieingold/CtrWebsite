@@ -6,12 +6,13 @@
     justify-content: flex-start;
     align-self: center;
     text-align: center;
+    font-family:Arial, Helvetica, sans-serif;
     
 }
 .InformationContainer {
     display: flex;
     justify-content: space-around;
-    background-color: black;
+
     text-align: center;
     align-items: center;
     height: 4rem;
@@ -19,12 +20,16 @@
     
 }
 .InformationBubble {
-    background-color: red;
-    width: 10rem;
+    background-color: rgb(31, 31, 31);
+    width: 20rem;
     height: 4rem;
     display: flex;
     text-align: center;
     justify-content: center;
     align-items: center;
     border-radius: 0.5rem;
+    border: 1px solid rgb(73,73,73)
+}
+.Title {
+    font-family:Arial, Helvetica, sans-serif;
 }
