@@ -16,10 +16,11 @@
     flex-direction: row;
     justify-content: left;
     align-items: center;
-
-    gap: 20px;
+    transition: 0.9s;
+    gap: 10px;
     width: 30%;
     margin-left: 20px;
+    cursor: pointer;
     
 }
 .logoImg {
@@ -27,9 +28,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: 0.9s;
 
 }
 .Title {
     font-family:Roboto;
 
+}
+.BrandDetails:hover {
+    .logoImg {
+        filter: drop-shadow(0 0 2em #61dafbaa);
+        transition: 0.9s;
+    }
+    
 }
