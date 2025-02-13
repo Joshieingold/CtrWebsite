@@ -21,3 +21,10 @@
     width: 30%;
     
 }
+.logoImg {
+    height: 5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}

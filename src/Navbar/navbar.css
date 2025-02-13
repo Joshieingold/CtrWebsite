@@ -1,5 +1,5 @@
 .NavMain {
-    background-color: rgb(31, 31, 31);
+    background-color: #FFFFFF;
     display: flex;
     flex-direction: column;
     height: 95vh;
@@ -8,55 +8,56 @@
     position: absolute;
     left: 0;
     bottom: 0;
-    font-family:Arial, Helvetica, sans-serif;
-    overflow-y: scroll;
+    font-family:Roboto;
+    
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
 }
 
 .ctr-link-container {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: last baseline;
-    color: white;
-}
-.ctr-number-link {
-    color: white;
-    cursor: pointer;
-    background: rgb(56,56,56);
-
-
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 0.4rem;
-    border: 1px solid rgb(73,73,73)
-
-
-}
-.home-btn {
-    display: flex;
-    font-size: x-large;
-    justify-content: center;
-    align-items: center;
-    font-weight: 900;
-    display: flex;
-    text-align: center;
-    margin-bottom: 2vh;
-}
-
-.icon {
-
-    height: 100%;
-    background-color: rebeccapurple;
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    align-items: center;
-    margin-right: 1vw
+    overflow-y: auto;
 }
 .ctr-number-container {
     display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
+    margin-left: 5px;
+    transition: 0.5s;
+    
+}
+.icon {
+    width: 50px;
+    height: 100%;
+    background-color: #FFFFFF;
+    display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
+    margin-right: 5%;
+    color: #8C8C8C;
+    border-right: 1px solid #F0F0F0;
+    transition: 0.5s;
+
+}
+.ctr-number-link {
+    color: black;
+    transition: 0.5s;
+}
+.ctr-number-container:hover {
+    background-color: #E6F7FF;
+    transition: 0.3s;
+    color: #1890FF;
+    .icon {
+        background-color: #E6F7FF;
+        border-right: 1px solid #E6F7FF;
+        transition: 0.3s;
+        color: #1890FF;
+    }
+    .ctr-number-link {
+        color: #1890FF;
+        transition: 0.3s;
+    }
+    
 }
