@@ -6,8 +6,11 @@ function Navbar() {
     <div className='NavMain'>
       <div className="ctr-link-container">
         <div className="ctr-number-container">
-          <img className="icon"></img>
-          <a className="ctr-number-link">Overview</a>
+          <div className="ImgContainer">
+            <div className="icon OverviewLogo"></div>
+          </div>
+          
+          <a className="ctr-number-link overview">Overview</a>
         </div>
         <div className="ctr-number-container">
           <p className="icon">8017</p>

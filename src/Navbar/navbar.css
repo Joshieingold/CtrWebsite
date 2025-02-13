@@ -55,9 +55,44 @@
         transition: 0.3s;
         color: #1890FF;
     }
+    .OverviewLogo {
+        background-image: url(../assets/overview-active.png);
+        
+        border: none;
+        
+    }
+    .ImgContainer {
+        border-right: 1px solid #E6F7FF;
+    }
     .ctr-number-link {
         color: #1890FF;
+        
         transition: 0.3s;
     }
     
 }
+.OverviewLogo {
+    width: 30px; /* Or the correct size */
+    height: 30px;
+    display: flex;
+    background-image: url(../assets/overview-inactive.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-clip: content-box;
+    outline: none;
+    box-shadow: none;
+    border: none;
+    
+}
+.ImgContainer {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid #F0F0F0;
+    transition: 0.5s;
+    margin-right: 5%;
+
+}
+
