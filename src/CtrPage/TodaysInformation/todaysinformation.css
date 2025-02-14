@@ -3,6 +3,7 @@
     margin-left: 20vw;
     width: 80vw;
     margin-top: 5vh;
+    height: 40vh;
 
 
 }
@@ -24,6 +25,7 @@
     height: 70%;
     padding: 1rem;
     border: 2px solid #F0F0F0;
+    transition: 0.5s;
     
 }
 .SmallDataContent {
@@ -40,4 +42,8 @@
 }
 .SmallDataText {
     margin-top: 5px;
+}
+.SmallDataCard:hover {
+    transform: translateY(-3px);
+    transition: 0.5s;
 }
