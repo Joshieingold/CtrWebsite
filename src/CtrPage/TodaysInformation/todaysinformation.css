@@ -131,12 +131,12 @@ td {
     }
 }
 .positive {
-    color: lightgreen;
+    color: #52C41A;
 
 }
 
 .negative {
-    color: lightcoral;
+    color: #F5222D;
 
 }
 
@@ -144,3 +144,27 @@ td {
     color: black;
 
 }
+
+.ProgressContainer {
+    margin: 10px 0;
+    width: 95%;
+}
+
+.ProgressBarBackground {
+    width: 100%;
+    height: 10px;
+    background-color: #F5F5F5;
+    border-radius: 5px;
+}
+
+.ProgressBar {
+    height: 100%;
+    border-radius: 5px;
+    background-color: #1890FF; /* Green color for progress */
+    transition: width 0.5s ease;
+}
+
+.ProgressContainer p {
+    margin: 5px 0;
+}
+
