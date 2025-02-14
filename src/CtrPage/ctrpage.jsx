@@ -1,8 +1,12 @@
-import CtrHeader from "./CtrHeader/ctrheader.jsx"
+import CtrHeader from "./CtrHeader/ctrheader.jsx";
+import TodayInfo from "./TodaysInformation/todaysinformation.jsx";
 function CTR() {
     return (
         <div className='CTRMain'>
             <CtrHeader />
+            <div className="CtrOverviewContainer">
+                <TodayInfo/>
+            </div>
         </div>
     );
   }

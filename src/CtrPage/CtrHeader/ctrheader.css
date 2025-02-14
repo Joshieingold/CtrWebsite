@@ -1,34 +1,34 @@
 .CtrHeaderMain {
     display: flex;
     flex-direction: row;
-    width: 85vw;
-    margin-left: 15vw;
+    width: 80vw;
+    margin-left: 20vw;
     height: 8vh;
     justify-content: left;
     align-items: center;
     align-self: center;
     text-align: center;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:Roboto;
     background-color: #FFFFFF;
     color: #000000c5;
  
 }
 
 .Title {
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:Roboto;
 }
 .TitleContainer {
     display: flex;
     flex-direction: row;
     justify-content: left;
     align-items: center;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:Roboto;
     gap: 20px;
     width: 50%;
     margin-left: 2vw;
 }
 .Subtitle {
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:Roboto;
 }
 .BackBtn {
     width: 2rem;

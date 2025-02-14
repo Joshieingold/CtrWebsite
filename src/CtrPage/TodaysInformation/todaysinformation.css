@@ -1,0 +1,43 @@
+.TodayInfoMain {
+    display: flex;
+    margin-left: 20vw;
+    width: 80vw;
+    margin-top: 5vh;
+
+
+}
+.SmallDataContainer {
+    display: flex;
+    flex-direction: row;
+    color: black;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+}
+.SmallDataCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    background-color: white;
+    width: 27%;
+    height: 70%;
+    padding: 1rem;
+    border: 2px solid #F0F0F0;
+    
+}
+.SmallDataContent {
+    border-bottom: 2px solid #F0F0F0;
+    justify-content: center;
+    display: flex;
+    height: 70%;
+    flex-direction: column;
+}
+.SmallDataTitle {
+    color: #616161;
+    align-items: center;
+    margin-bottom: 5px;
+}
+.SmallDataText {
+    margin-top: 5px;
+}
