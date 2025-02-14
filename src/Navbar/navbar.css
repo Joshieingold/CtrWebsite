@@ -7,7 +7,8 @@
     justify-content: center;
     position: absolute;
     left: 0;
-    bottom: 0;
+   
+    
     font-family:Roboto;
     
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
@@ -40,6 +41,7 @@
     color: #8C8C8C;
     border-right: 1px solid #F0F0F0;
     transition: 0.5s;
+    font-weight: bold;
 
 }
 .ctr-number-link {
