@@ -1,7 +1,7 @@
 .HeadNavMain {
     display: flex;
     background-color: #001529;
-    position: absolute;
+    position: fixed;
     top: 0;
     height: 5vh;
     width: 100%;
