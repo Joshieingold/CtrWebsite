@@ -1,0 +1,20 @@
+/* Weekly Table Styles */
+.weekly-table-container {
+    width: 100%;
+
+    margin-left: 20vw;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    flex-direction: column;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+  }
+  
+ 
