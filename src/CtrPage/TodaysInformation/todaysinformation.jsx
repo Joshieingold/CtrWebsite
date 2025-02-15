@@ -16,18 +16,18 @@ function TodayInfo() {
     const devicesData = [
         { name: 'XB8', inventory: 22, maxAllowed: 24 },
         { name: 'XB7', inventory: 69, maxAllowed: 54 },
-        { name: 'XI6', inventory: 47, maxAllowed: 75 },
-        { name: 'XIONE', inventory: 9, maxAllowed: 75 },
-        { name: 'PODS', inventory: 46, maxAllowed: 30 },
-        { name: 'ONTS', inventory: 0, maxAllowed: 0 },
-        { name: 'SCHB1AEW', inventory: 11, maxAllowed: 20 },
-        { name: 'SCHC2AEW', inventory: 9, maxAllowed: 20 },
-        { name: 'SCHC3AEW', inventory: 5, maxAllowed: 20 },
-        { name: 'XIONE - ENTOS', inventory: 50, maxAllowed: 0 }, // Example without maxAllowed
-        { name: 'MR36HW', inventory: 2, maxAllowed: 0 },
-        { name: 'S5A134A', inventory: 3, maxAllowed: 0 },
-        { name: 'CM8200A', inventory: 16, maxAllowed: 0 },
-        { name: 'CODA5810', inventory: 40, maxAllowed: 0 }
+        { name: 'Xi6', inventory: 47, maxAllowed: 75 },
+        { name: 'XiOne', inventory: 9, maxAllowed: 75 },
+        { name: 'Pods', inventory: 46, maxAllowed: 30 },
+        { name: 'Onts', inventory: 0, maxAllowed: 0 },
+        { name: 'Camera 1', inventory: 11, maxAllowed: 20 },
+        { name: 'Camera 2', inventory: 9, maxAllowed: 20 },
+        { name: 'Camera 3', inventory: 5, maxAllowed: 20 },
+        { name: 'XiOne Entos', inventory: 50, maxAllowed: 0 }, // Example without maxAllowed
+        { name: 'Meraki', inventory: 2, maxAllowed: 5 },
+        { name: 'Cradlepoint', inventory: 3, maxAllowed: 5 },
+        { name: 'CM8200A', inventory: 16, maxAllowed: 20 },
+        { name: 'Coda5810', inventory: 40, maxAllowed: 50 }
     ];
 
     return (
@@ -38,8 +38,8 @@ function TodayInfo() {
                         <p className="SmallDataTitle">Last Order</p>
                         <div className="SmallDataContent">
                             <h3 className="SmallDataContentHeader">Number of Picks: 2</h3>
-                            <p className="SmallDataText">S5A134A: 5</p>
-                            <p className="SmallDataText">CODA5810: 5</p>
+                            <p className="SmallDataText">Cradlepoint: 5</p>
+                            <p className="SmallDataText">Coda5810: 5</p>
                         </div>
                         <p className="SmallDataText">Completed on January 15 2025</p>
                     </div>
@@ -74,7 +74,7 @@ function TodayInfo() {
                                     <th>Device</th>
                                     <th>Inventory</th>
                                     <th>Max Allowed</th>
-                                    <th>+/-</th>
+                                    <th>Gain/Loss</th>
                                 </tr>
                             </thead>
                             <tbody>
