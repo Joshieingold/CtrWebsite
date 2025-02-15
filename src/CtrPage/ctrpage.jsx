@@ -8,7 +8,7 @@ function CTR() {
             <CtrHeader />
             <div className="CtrOverviewContainer">
                 <TodayInfo/>
-                <CTRWeeklyTable ctrId="8019"/>
+                <CTRWeeklyTable ctrId="8019" className="TableData"/>
             </div>
             
         </div>
