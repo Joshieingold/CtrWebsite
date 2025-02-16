@@ -1,7 +1,9 @@
 /* Weekly Table Styles */
-.weekly-table-container {
-    width: 70vw;
-    margin-top: 35vh;
+
+/* Container Styling */
+.ctr-weekly-table-container {
+    width: 75vw;
+    margin-top: 25vh;
     margin-left: 20vw;
     text-align: center;
     display: flex;
@@ -9,5 +11,51 @@
     align-items: center;
     color: black;
     flex-direction: column;
-  }
-  
+    justify-self: center;
+    margin-bottom: 5rem;
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
+
+}
+
+/* Table Styling */
+.ctr-weekly-table {
+    width: 100%; /* Fit table to content */
+    border-collapse: collapse;
+    font-size: 10px; /* Smaller font */
+}
+
+/* Table Headers & Cells */
+.ctr-weekly-table th,
+.ctr-weekly-table td {
+    padding: 4px 6px; /* Reduce padding for a more compact look */
+    text-align: center;
+    border: 1px solid #ddd;
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
+.ctr-weekly-table th {
+    font-weight: bold;
+    background-color: #f4f4f4;
+}
+
+/* Row Height */
+.ctr-weekly-table td {
+    height: 10px; /* Reduce row height */
+}
+
+/* Ensure Table Fits Content */
+.ctr-weekly-table .SnapshotBody tr td {
+    min-width: 50px; /* Ensures columns fit content */
+    max-width: 120px; /* Prevents too-wide columns */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Truncate text if too long */
+}
+
+/* Positive & Negative Number Colors */
+.ctr-weekly-table .positive {
+    color: green;
+}
+
+.ctr-weekly-table .negative {
+    color: red;
+}
