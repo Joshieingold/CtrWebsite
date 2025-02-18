@@ -45,6 +45,10 @@
 }
 .SmallDataText {
     margin-top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    text-align: left;
 }
 .SmallDataCard:hover {
     transform: translateY(-3px);
@@ -59,6 +63,11 @@
     height: 40vh;
 
 
+}
+li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
 
 .BigDataCard {
@@ -107,6 +116,7 @@ td {
     padding: 1%;
     border-bottom: 2px solid #E5EAF4;
 }
+
 .BigTitle {
     color: #616161;
     align-items: center;
@@ -147,11 +157,11 @@ td {
 
 .ProgressContainer {
     margin: 10px 0;
-    width: 95%;
+    width: 100%;
 }
 
 .ProgressBarBackground {
-    width: 100%;
+    width: 95%;
     height: 10px;
     background-color: #F5F5F5;
     border-radius: 5px;
