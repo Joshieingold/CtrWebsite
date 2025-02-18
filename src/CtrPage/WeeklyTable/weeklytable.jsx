@@ -55,8 +55,8 @@ const CTRWeeklyTable = ({ ctrId }) => {
             <th></th>
             {daysOfWeek.map((_, index) => (
               <React.Fragment key={`header-${index}`}>
-                <th>Count</th>
-                <th>Orders</th>
+                <th>Inventory</th>
+                <th>Ordered</th>
                 <th>+/-</th>
               </React.Fragment>
             ))}

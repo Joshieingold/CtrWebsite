@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from "react";
+import { fetchLatestCTRReport } from "../api.jsx";
 import "./todaysinformation.css";
 
 function getColorClass(value) {
@@ -7,61 +9,52 @@ function getColorClass(value) {
 }
 
 function calculatePercentage(inventory, maxAllowed) {
-    // If maxAllowed is not provided or 0, return 0 to prevent division by zero
     if (!maxAllowed || maxAllowed === 0) return 0;
     return (inventory / maxAllowed) * 100;
 }
 
-function TodayInfo() {
-    const devicesData = [
-        { name: 'XB8', inventory: 22, maxAllowed: 24 },
-        { name: 'XB7', inventory: 69, maxAllowed: 54 },
-        { name: 'Xi6', inventory: 47, maxAllowed: 75 },
-        { name: 'XiOne', inventory: 9, maxAllowed: 75 },
-        { name: 'Pods', inventory: 46, maxAllowed: 30 },
-        { name: 'Onts', inventory: 0, maxAllowed: 0 },
-        { name: 'Camera 1', inventory: 11, maxAllowed: 20 },
-        { name: 'Camera 2', inventory: 9, maxAllowed: 20 },
-        { name: 'Camera 3', inventory: 5, maxAllowed: 20 },
-        { name: 'XiOne Entos', inventory: 50, maxAllowed: 0 }, // Example without maxAllowed
-        { name: 'Meraki', inventory: 2, maxAllowed: 5 },
-        { name: 'Cradlepoint', inventory: 3, maxAllowed: 5 },
-        { name: 'CM8200A', inventory: 16, maxAllowed: 20 },
-        { name: 'Coda5810', inventory: 40, maxAllowed: 50 }
-    ];
+function TodayInfo({ ctrId = "8017" }) { // Provide a default CTR ID
+    const [latestData, setLatestData] = useState(null);
 
+    useEffect(() => {
+        const loadLatestReport = async () => {
+            if (!ctrId) {
+                console.error("Missing CTR ID");
+                return;
+            }
+            try {
+                const report = await fetchLatestCTRReport(ctrId);
+                setLatestData(report);
+            } catch (error) {
+                console.error("Error fetching latest report:", error);
+            }
+        };
+
+        loadLatestReport();
+    }, [ctrId]); // Dependency added for reloading when `ctrId` changes
+
+    if (!latestData) {
+        return <div>Loading latest inventory data...</div>;
+    }
+
+    const { date = "Unknown Date", deviceCounts = {}, deviceOrders = {} } = latestData;
+    const deviceList = Object.keys(deviceCounts);
+    
     return (
         <div className="TodayInfoMain">
             <div className="SmallDataContainer">
-                
-                    <div className="SmallDataCard">
-                        <p className="SmallDataTitle">Last Order</p>
-                        <div className="SmallDataContent">
-                            <h3 className="SmallDataContentHeader">Number of Picks: 2</h3>
-                            <p className="SmallDataText">Cradlepoint: 5</p>
-                            <p className="SmallDataText">Coda5810: 5</p>
-                        </div>
-                        <p className="SmallDataText">Completed on January 15 2025</p>
+                <div className="SmallDataCard">
+                    <p className="SmallDataTitle">Last Order</p>
+                    <div className="SmallDataContent">
+                        <h3 className="SmallDataContentHeader">
+                            Number of Picks: {Object.keys(deviceOrders).length}
+                        </h3>
+                        {Object.entries(deviceOrders).map(([device, amount]) => (
+                            <p key={device} className="SmallDataText">{device}: {amount}</p>
+                        ))}
                     </div>
-                    <div className="SmallDataCard">
-                        <p className="SmallDataTitle">Data Title</p>
-                        <div className="SmallDataContent">
-                            <h3 className="SmallDataContentHeader">Main Point</h3>
-                            <p className="SmallDataText">subdata</p>
-                            <p className="SmallDataText">subdata</p>
-                        </div>
-                        <p className="SmallDataText">Final Point</p>
-                    </div>
-                    <div className="SmallDataCard">
-                        <p className="SmallDataTitle">Data Title</p>
-                        <div className="SmallDataContent">
-                            <h3 className="SmallDataContentHeader">Main Point</h3>
-                            <p className="SmallDataText">subdata</p>
-                            <p className="SmallDataText">subdata</p>
-                        </div>
-                        <p className="SmallDataText">Final Point</p>
-                    </div>
-
+                    <p className="SmallDataText">Completed on {date}</p>
+                </div>
             </div>
 
             <div className="BigDataContainer">
@@ -78,16 +71,20 @@ function TodayInfo() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {devicesData.map((device, index) => (
-                                    <tr key={index}>
-                                        <td>{device.name}</td>
-                                        <td>{device.inventory}</td>
-                                        <td>{device.maxAllowed}</td>
-                                        <td className={getColorClass(device.inventory - device.maxAllowed)}>
-                                            {device.inventory - device.maxAllowed}
-                                        </td>
-                                    </tr>
-                                ))}
+                                {deviceList.map((device, index) => {
+                                    const inventory = deviceCounts[device] || 0;
+                                    const maxAllowed = 50; // Replace with actual logic
+                                    return (
+                                        <tr key={index}>
+                                            <td>{device}</td>
+                                            <td>{inventory}</td>
+                                            <td>{maxAllowed}</td>
+                                            <td className={getColorClass(inventory - maxAllowed)}>
+                                                {inventory - maxAllowed}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
                         </table>
                     </div>
@@ -96,15 +93,17 @@ function TodayInfo() {
                 <div className="BigDataCard">
                     <div className="BigTitle">Inventory Capacity</div>
                     <div className="BigDataContent">
-                        {devicesData.map((device, index) => {
-                            const percentage = calculatePercentage(device.inventory, device.maxAllowed);
+                        {deviceList.map((device, index) => {
+                            const inventory = deviceCounts[device] || 0;
+                            const maxAllowed = 50; // Replace with actual logic
+                            const percentage = calculatePercentage(inventory, maxAllowed);
                             return (
                                 <div key={index} className="ProgressContainer">
-                                    <p>{device.name}: {percentage.toFixed(2)}%</p>
+                                    <p>{device}: {percentage.toFixed(2)}%</p>
                                     <div className="ProgressBarBackground">
                                         <div
                                             className="ProgressBar"
-                                            style={{ width: `${percentage > 100 ? 100 : percentage}%` }}
+                                            style={{ width: `${Math.min(100, percentage)}%` }}
                                         ></div>
                                     </div>
                                 </div>
