@@ -31,28 +31,33 @@ function TodayInfo({ ctrId = "8017" }) {
         const loadReports = async () => {
             try {
                 if (!ctrId) throw new Error("Missing CTR ID");
-
+        
                 const [latestReport, priorReport, ctrInfo] = await Promise.all([ 
                     fetchLatestCTRReport(ctrId), 
                     fetchPriorCTRReport(ctrId), 
                     FetchCTRDetails(ctrId) 
                 ]);
-
+        
                 setLatestData(latestReport);
                 setPriorData(priorReport);
                 setCTRDetails(ctrInfo);
-
+        
                 const reportsWithOrders = await getReportsWithOrders(ctrId);
-
+        
                 if (reportsWithOrders.length > 0) {
                     const mostRecentOrderReport = reportsWithOrders[0];
                     setMostRecentOrderTime(mostRecentOrderReport.dateSubmitted);
-                    setOrderDetails(Object.entries(mostRecentOrderReport.deviceOrders || {}));
+        
+                    // ✅ Only include orders where quantity > 0
+                    setOrderDetails(
+                        Object.entries(mostRecentOrderReport.deviceOrders || {}).filter(([_, quantity]) => quantity > 0)
+                    );
                 }
             } catch (error) {
                 console.error("Error fetching reports:", error);
             }
         };
+        
 
         loadReports();
     }, [ctrId]);
@@ -64,14 +69,24 @@ function TodayInfo({ ctrId = "8017" }) {
             const q = query(
                 reportsRef,
                 where("ctrId", "==", ctrId),
-                where("deviceOrders", ">", {}),
                 orderBy("dateSubmitted", "desc")
             );
+    
             const querySnapshot = await getDocs(q);
             const reportsWithOrders = [];
+    
             querySnapshot.forEach((doc) => {
-                reportsWithOrders.push(doc.data());
+                const data = doc.data();
+                const deviceOrders = data.deviceOrders || {};
+                
+                // Check if any device order is greater than 0
+                const hasRealOrders = Object.values(deviceOrders).some(value => value > 0);
+                
+                if (hasRealOrders) {
+                    reportsWithOrders.push(data);
+                }
             });
+    
             return reportsWithOrders;
         } catch (error) {
             console.error("Error fetching reports with orders:", error);
