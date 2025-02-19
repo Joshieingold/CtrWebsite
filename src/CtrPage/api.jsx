@@ -1,4 +1,4 @@
-import { endOfWeek, format, startOfWeek } from "date-fns";
+import { endOfWeek, format, startOfWeek, eachDayOfInterval, isWithinInterval } from "date-fns";
 import { collection, getDocs, query, where, orderBy, limit } from "firebase/firestore";
 import { db } from "./firebase"; // Firestore instance
 
@@ -7,31 +7,28 @@ import { db } from "./firebase"; // Firestore instance
  * Fetches CTR reports for the given ctrId within the current week (Monday–Friday).
  * @param {string} ctrId - The CTR ID (e.g., "8019").
  * @returns {Promise<Object>} - Reports indexed by date.
- */
-export const fetchCTRReportsForWeek = async (ctrId) => {
+**/
+
+export const fetchCTRReportsForWeek = async (ctrId, startDate, endDate) => {
   try {
-    if (!ctrId) {
-      console.error("Invalid CTR ID");
-      return;
+    if (!ctrId || !startDate || !endDate) {
+      console.error("Invalid parameters: ctrId, startDate, and endDate are required.");
+      return {};
     }
 
-    // Get the start and end of the current week
-    const today = new Date();
-    const weekStart = startOfWeek(today, { weekStartsOn: 1 }); // Monday
-    const weekEnd = endOfWeek(today, { weekStartsOn: 1 });
+    // Convert startDate and endDate to Date objects, in case they are passed as strings
+    const start = new Date(startDate);
+    const end = new Date(endDate);
 
     // Reference Firestore collection
     const reportsRef = collection(db, "CTR-Reports");
 
-    // Convert weekStart and weekEnd to Firestore Timestamp format
-    const weekStartTimestamp = new Date(weekStart).getTime();
-    const weekEndTimestamp = new Date(weekEnd).getTime();
-
+    // Firestore query to fetch reports between the start and end dates
     const q = query(
       reportsRef,
       where("ctrId", "==", ctrId),
-      where("dateSubmitted", ">=", weekStart),
-      where("dateSubmitted", "<=", weekEnd)
+      where("dateSubmitted", ">=", start),
+      where("dateSubmitted", "<=", end)
     );
 
     // Fetch data from Firestore
@@ -42,16 +39,15 @@ export const fetchCTRReportsForWeek = async (ctrId) => {
       const data = doc.data();
       const dateStr = format(data.dateSubmitted.toDate(), "yyyy-MM-dd"); // Format date for indexing
       reports[dateStr] = data;
-      
     });
 
     return reports;
   } catch (error) {
     console.error("Error fetching CTR reports:", error);
-    
     return {};
   }
 };
+
 export const fetchLatestCTRReport = async (ctrId) => {
   try {
     if (!ctrId) {
@@ -142,4 +138,73 @@ export const FetchCTRDetails = async (ctrId) => {
     console.error("Error fetching CTR Description", error);
     return null;
   }
+}
+export const GetAllCTRReports = async (ctrId) => {
+  try {
+    if (!ctrId) {
+      console.error("Invalid CTR ID");
+      return [];
+    }
+
+    // Reference Firestore collection
+    const reportsRef = collection(db, "CTR-Reports");
+
+    // Query for the first and last report
+    const firstReportQuery = query(
+      reportsRef,
+      where("ctrId", "==", ctrId),
+      orderBy("dateSubmitted", "asc"),
+      limit(1)
+    );
+    const lastReportQuery = query(
+      reportsRef,
+      where("ctrId", "==", ctrId),
+      orderBy("dateSubmitted", "desc"),
+      limit(1)
+    );
+
+    const [firstReportSnapshot, lastReportSnapshot] = await Promise.all([
+      getDocs(firstReportQuery),
+      getDocs(lastReportQuery),
+    ]);
+
+    if (firstReportSnapshot.empty || lastReportSnapshot.empty) {
+      console.log("No reports found for CTR ID:", ctrId);
+      return [];
+    }
+
+    const firstReport = firstReportSnapshot.docs[0].data();
+    const lastReport = lastReportSnapshot.docs[0].data();
+
+    // Determine the start and end dates
+    const startDate = firstReport.dateSubmitted.toDate();
+    const endDate = lastReport.dateSubmitted.toDate();
+
+    // Generate a sequence of dates for each day within the interval
+    const allDates = eachDayOfInterval({ start: startDate, end: endDate });
+    const reports = [];
+
+
+    // Iterate through each day and create a report
+    for (const date of allDates) {
+      const dayStart = startOfWeek(date, { weekStartsOn: 1 });
+      const dayEnd = endOfWeek(date, { weekStartsOn: 1 });
+      // Check if the current date falls within a weekday (Monday-Friday)
+      if (isWithinInterval(date, { start: dayStart, end: dayEnd })) {
+        const report = {
+          ctrId: ctrId,
+          dateSubmitted: date,
+          dateString: format(date, "yyyy-MM-dd"),
+          data: {},
+        };
+        reports.push(report);
+      }
+    }
+    
+    return reports;
+  } catch (error) {
+    console.error("Error fetching all CTR reports:", error);
+    return [];
+  }
+
 }
