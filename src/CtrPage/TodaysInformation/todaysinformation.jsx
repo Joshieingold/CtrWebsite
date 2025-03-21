@@ -7,7 +7,7 @@ import { format } from "date-fns"; // Import the format function from date-fns
 import "./todaysinformation.css";
 
 const deviceOrder = [
-    "XB8", "XB7", "Xi6", "XiOne", "Pods", "Onts", "Camera 1", "Camera 2",
+    "CGM4981COM", "CGM4331COM", "IPTVTCXI6HD", "SCXI11BEI", "XE2SGROG1", "Onts", "Camera 1", "Camera 2",
     "Camera 3", "XiOne Entos", "Meraki", "Cradlepoint", "CM8200A", "Coda5810"
 ];
 function getColorClass(value) {
@@ -20,7 +20,7 @@ function calculatePercentage(inventory, maxAllowed) {
     if (!maxAllowed || maxAllowed === 0) return 0;
     return (inventory / maxAllowed) * 100;
 }
-function TodayInfo({ ctrId = "8017" }) {
+function TodayInfo({ ctrId = "8052" }) {
     const [latestData, setLatestData] = useState(null);
     const [priorData, setPriorData] = useState(null);
     const [ctrDetails, setCTRDetails] = useState(null);

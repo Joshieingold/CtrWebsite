@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./ctrheader.css";
 import { FetchCTRDetails } from "../api";
 
-function CtrHeader({ ctrId = "8017" }) {
+function CtrHeader({ ctrId = "8052" }) {
   const [ctrDetails, setCTRDetails] = useState(null);
 
   // Fetch the CTR details when the component mounts or when ctrId changes
