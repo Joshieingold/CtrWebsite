@@ -1,19 +1,20 @@
 import React from "react";
 import "./App.css"; // Import CSS for styling
 import logo from "./assets/logo.png";
+import overview from "./assets/overview-inactive.png";
 
 const Header = () => (
-  <div className="header">
+  <a className="header">
     <div className="logo">
       <img className="LogoImage" src={logo}></img>
     </div>
     <h2 className="Title">CTR Daily Run</h2>
-  </div>
+  </a>
 );
 
 const SelectionBox = () => {
   const items = [
-    { number: "Overview", name: "" },
+    { number: "", name: "Overview" },
     { number: "8052", name: "Company A" },
     { number: "8067", name: "Company B" },
     { number: "8090", name: "Company C" },

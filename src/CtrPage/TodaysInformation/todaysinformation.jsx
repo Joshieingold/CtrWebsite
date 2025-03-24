@@ -7,8 +7,8 @@ import { format } from "date-fns"; // Import the format function from date-fns
 import "./todaysinformation.css";
 
 const deviceOrder = [
-    "CGM4981COM", "CGM4331COM", "IPTVTCXI6HD", "SCXI11BEI", "XE2SGROG1", "Onts", "Camera 1", "Camera 2",
-    "Camera 3", "XiOne Entos", "Meraki", "Cradlepoint", "CM8200A", "Coda5810"
+    "CGM4981COM", "CGM4331COM", "IPTVTCXI6HD", "SCXI11BEI", "XE2SGROG1", "XS010XQ", "Camera 1", "Camera 2",
+    "Camera 3", "SCXI11BEI-ENTOS", "Meraki", "Cradlepoint", "CM8200A", "Coda5810"
 ];
 function getColorClass(value) {
     if (value > 0) return "positive";
