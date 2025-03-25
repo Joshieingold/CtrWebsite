@@ -3,7 +3,7 @@ import "./App.css"; // Import CSS for styling
 import logo from "./assets/logo.png";
 import overview from "./assets/overview-inactive.png";
 import { se } from "date-fns/locale";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const CTRs = [
     { number: "", name: "Overview" },
@@ -16,7 +16,8 @@ const CTRs = [
     { number: "NF1", name: "Newfoundland Warehouse" },
   ];
 
-const Header = () => (
+// PIECES
+const Header = () => ( // Blue top bar with logo
   <a className="header">
     <div className="logo">
       <img className="LogoImage" src={logo}></img>
@@ -25,7 +26,7 @@ const Header = () => (
   </a>
 );
 
-const SelectionBox = ({ selectedCtr, setSelectedCtr }) => {
+const SelectionBox = ({ selectedCtr, setSelectedCtr }) => { // Selection box with CTRs
   const items = [
     { number: "", name: "Overview" },
     { number: "8052", name: "DHT Fredericton" },
@@ -56,20 +57,43 @@ const SelectionBox = ({ selectedCtr, setSelectedCtr }) => {
 };
 
 
-const CtrBanner = ({selectedCtr}) => (
-  <div className="ctr-banner">
-    <div className="left-banner-content">
-      <h3>{selectedCtr.name}</h3>
-      <h4 className="subtext">Contractor: {selectedCtr.number}</h4>
-    </div>
-    <div className="right-banner-content">
-      <button className="banner-button">Copy Address</button>
-      <button className="banner-button">Add Orders</button>
-    </div>
-  </div>
-);
 
-const OverviewContainer = () => (
+
+const CtrBanner = ({ selectedCtr }) => {
+  const [displayName, setDisplayName] = useState(selectedCtr.name);
+  const [displayNumber, setDisplayNumber] = useState(selectedCtr.number);
+  const [animClass, setAnimClass] = useState("");
+
+  useEffect(() => {
+    if (selectedCtr.name !== displayName || selectedCtr.number !== displayNumber) {
+      setAnimClass("slide-out");
+      setTimeout(() => {
+        setDisplayName(selectedCtr.name);
+        setDisplayNumber(selectedCtr.number);
+        setAnimClass("slide-in");
+      }, 400);
+    }
+  }, [selectedCtr]);
+
+  return (
+    <div className="ctr-banner">
+      <div className="left-banner-content">
+        <h3 className={animClass}>{displayName}</h3>
+        <h4 className={`subtext ${animClass}`}>Contractor: {displayNumber}</h4>
+      </div>
+      <div className="right-banner-content">
+        <button className="banner-button">Copy Address</button>
+        <button className="banner-button">Add Orders</button>
+      </div>
+    </div>
+  );
+};
+
+
+
+
+
+const OverviewContainer = () => (// shows the quick stats
   <div className="overview-container">
     <div className="big-panel-container">
       <div className="stats-bubble"></div>
@@ -83,9 +107,10 @@ const OverviewContainer = () => (
   </div>
 );
 
-const SpreadsheetContainer = () => 
+const SpreadsheetContainer = () => // temp container for the spreadsheets
 <div className="spreadsheet-container"></div>;
 
+// FORMATTING PIECES
 const CtrData = ({selectedCtr}) => (
   <div className="ctr-data">
     <CtrBanner selectedCtr={selectedCtr}/>
