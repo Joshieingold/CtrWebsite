@@ -103,7 +103,9 @@ const OverviewContainer = ({ selectedCtr }) => (
       <div className="stats-bubble"></div>
     </div>
     <div className="small-panel-container">
-      <div className="graph-bubble"></div>
+      <div className="graph-bubble">
+        <CTRBarChart ctrId={selectedCtr.number} /> {/* Pass ctrId dynamically */}
+      </div>
       <div className="graph-bubble"></div>
       <div className="graph-bubble"></div>
     </div>
