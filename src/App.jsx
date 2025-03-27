@@ -4,6 +4,8 @@ import logo from "./assets/logo.png";
 import overview from "./assets/overview-inactive.png";
 import { se } from "date-fns/locale";
 import { useState, useEffect } from "react";
+import { FetchCTRDetails, fetchCTRReports } from "./CtrPage/api";
+import CTRBarChart from "./CTRBarChart";
 
 const CTRs = [
     { number: "", name: "Overview" },
@@ -63,7 +65,6 @@ const CtrBanner = ({ selectedCtr }) => {
   const [displayName, setDisplayName] = useState(selectedCtr.name);
   const [displayNumber, setDisplayNumber] = useState(selectedCtr.number);
   const [animClass, setAnimClass] = useState("");
-
   useEffect(() => {
     if (selectedCtr.name !== displayName || selectedCtr.number !== displayNumber) {
       setAnimClass("slide-out");
@@ -93,10 +94,12 @@ const CtrBanner = ({ selectedCtr }) => {
 
 
 
-const OverviewContainer = () => (// shows the quick stats
+const OverviewContainer = ({ selectedCtr }) => (
   <div className="overview-container">
     <div className="big-panel-container">
-      <div className="stats-bubble"></div>
+      <div className="stats-bubble">
+        <CTRBarChart ctrId={selectedCtr.number} /> {/* Pass ctrId dynamically */}
+      </div>
       <div className="stats-bubble"></div>
     </div>
     <div className="small-panel-container">
@@ -114,13 +117,14 @@ const SpreadsheetContainer = () => // temp container for the spreadsheets
 const CtrData = ({selectedCtr}) => (
   <div className="ctr-data">
     <CtrBanner selectedCtr={selectedCtr}/>
-    <OverviewContainer />
+    <OverviewContainer selectedCtr={selectedCtr} />
     <SpreadsheetContainer />
   </div>
 );
 
 const App = () => {
   const [selectedCtr, setSelectedCtr] = useState(CTRs[1]);
+  console.log(fetchCTRReports(selectedCtr.number))
   return (
     <div className="window">
       <Header selectedCtr={selectedCtr}/>

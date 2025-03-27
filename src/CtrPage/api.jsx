@@ -79,37 +79,45 @@ export const fetchLatestCTRReport = async (ctrId) => {
     return null;
   }
 };
-export const fetchPriorCTRReport = async (ctrId) => {
+export const fetchCTRReports = async (ctrId) => {
   try {
     if (!ctrId) {
       console.error("Invalid CTR ID");
       return null;
     }
 
-    // Reference Firestore collection
     const reportsRef = collection(db, "CTR-Reports");
 
-    // Query for the most recent report, ordered by dateSubmitted descending
     const q = query(
       reportsRef,
-      where("ctrId", "==", ctrId),
+      where("ctrID", "==", ctrId), // Ensure field name matches Firestore
       orderBy("dateSubmitted", "desc"),
       limit(2)
     );
 
-    // Fetch data from Firestore
     const querySnapshot = await getDocs(q);
-    
-    if (!querySnapshot.empty) {
-      return querySnapshot.docs[1].data();
+
+    console.log("Number of reports found:", querySnapshot.docs.length);
+
+    if (querySnapshot.docs.length < 2) {
+      console.warn("Not enough reports found.");
+      return null;
     }
-    
-    return null;
+
+    // Return full report objects
+    return {
+      todayReport: querySnapshot.docs[0].data(),
+      priorReport: querySnapshot.docs[1].data(),
+    };
   } catch (error) {
-    console.error("Error fetching latest CTR report:", error);
+    console.error("Error fetching CTR reports:", error);
     return null;
   }
 };
+
+
+
+
 export const FetchCTRDetails = async (ctrId) => {
   try {
     if (!ctrId) {
