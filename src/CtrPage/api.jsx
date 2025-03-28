@@ -115,6 +115,34 @@ export const fetchCTRReports = async (ctrId) => {
   }
 };
 
+export const fetchDeliveryTrackerData = async () => {
+  try {
+    const deliveryRef = collection(db, "DeliveryTracker");
+    const querySnapshot = await getDocs(deliveryRef);
+
+    if (querySnapshot.empty) {
+      console.warn("No delivery data found.");
+      return null;
+    }
+
+    let techOrders = {};
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      const techName = data.TechName || "Unknown";
+
+      techOrders[techName] = (techOrders[techName] || 0) + 1;
+    });
+
+    console.log("Tech Orders Data:", techOrders);
+
+    return techOrders;
+  } catch (error) {
+    console.error("Error fetching delivery tracker data:", error);
+    return null;
+  }
+};
+
 
 
 

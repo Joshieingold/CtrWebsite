@@ -25,6 +25,18 @@ body {
   height: 6vh;
   color: white;
 }
+.LogoContainer {
+    display: flex;
+  background-color: #001529;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  text-align: center;
+  font-family: Roboto;
+  width: 100%;
+  height: 6vh;
+  color: white;
+}
 .header:hover {
   color: white;
   .logo {
@@ -38,12 +50,18 @@ body {
   font-weight: 500;
 
 }
-.logo {
 
+.logo {
   height: 100%;
   margin-right: 10px;
   transition: 0.9s;
   margin-left: 10px;
+}
+.Links {
+  display: flex;
+  justify-content: space-around;
+  width: 30%;
+  color: white;
 }
 .logo:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
@@ -192,8 +210,16 @@ body {
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
   border-radius: 10px;
 }
+.big-graph-bubble {
+  width: 90%;
+  height: 100%;
+  background-color: white;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+}
 
-.small-panel-container {
+
+aroundl-panel-container {
   display: flex;
   justify-content: space-around;
   margin-top: 20px;
