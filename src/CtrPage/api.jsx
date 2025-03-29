@@ -120,33 +120,53 @@ export const fetchDeviceQuantityData = async () => {
     const querySnapshot = await getDocs(deliveryRef);
 
     if (querySnapshot.empty) {
-      console.warn("No delivery data found.");
-      return null;
+      console.warn("⚠️ No delivery data found.");
+      return {};
     }
+
+    const excludedNames = [
+      "1318 Grand Lake Rd", "35 Rue Court", "454 KING GEORGE HWY",
+      "55 Expansion Ave", "875 Bayside Drive Unit 3", "70 Assomption Bvd.",
+      "1318 Grand Lake Road", "70 Assomption Blvd", "Acadian Peninsula (Caraquet)",
+      "454 King George Hwy", "70 Assomption blvd", "106 Whalen Street",
+      "2978 Rte 132", "875 Bayside Drive", "EDI Inc", "TRAN NF1_Newfoundland Warehouse",
+      "Virtual Location", "1595 North Service Rd E CTDI", "MICHAEL BARNED", "246 Church St"
+    ];
 
     let techOrders = {};
 
     querySnapshot.forEach((doc) => {
       const data = doc.data();
-      const techName = data.TechName || "Unknown";
+      const techName = data.TechName?.trim() || "Unknown";
+      const location = data.Location?.trim() || "Misc";
 
-      // Ensure devices exist
+      // **Exclude specific TechNames**
+      if (excludedNames.includes(techName)) return;
+
       if (!data.Devices || typeof data.Devices !== "object") return;
 
-      // Sum total devices for this entry
-      const totalDevices = Object.values(data.Devices).reduce((sum, qty) => sum + qty, 0);
+      // Sum up total devices
+      const totalDevices = Object.values(data.Devices)
+        .reduce((sum, qty) => sum + (Number(qty) || 0), 0);
 
-      // Add to existing total or initialize
-      techOrders[techName] = (techOrders[techName] || 0) + totalDevices;
+      if (!techOrders[techName]) {
+        techOrders[techName] = { TotalDevices: 0, Location: location };
+      }
+
+      techOrders[techName].TotalDevices += totalDevices;
     });
 
-    console.log("Tech Orders Data:", techOrders);
+    console.log("🔍 Fetched Device Quantity Data (After Filtering):", techOrders);
     return techOrders;
   } catch (error) {
-    console.error("Error fetching delivery tracker data:", error);
-    return null;
+    console.error("❌ Error fetching delivery tracker data:", error);
+    return {};
   }
 };
+
+
+
+
 
 export const fetchDeliveryTrackerData = async () => {
   try {
@@ -163,12 +183,19 @@ export const fetchDeliveryTrackerData = async () => {
     querySnapshot.forEach((doc) => {
       const data = doc.data();
       const techName = data.TechName || "Unknown";
+      const location = data.Location || "Misc"; // Default to Misc if missing
 
-      techOrders[techName] = (techOrders[techName] || 0) + 1;
+      if (!techOrders[techName]) {
+        techOrders[techName] = {
+          TotalOrders: 0,
+          Location: location, // Store location for filtering
+        };
+      }
+
+      techOrders[techName].TotalOrders += 1;
     });
 
     console.log("Tech Orders Data:", techOrders);
-
     return techOrders;
   } catch (error) {
     console.error("Error fetching delivery tracker data:", error);
