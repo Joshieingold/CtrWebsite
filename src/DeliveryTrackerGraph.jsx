@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Bar } from "react-chartjs-2"; // Import from chart.js
+import { Bar } from "react-chartjs-2";
 import { fetchDeliveryTrackerData } from "./CtrPage/api.jsx"; // Adjust the path
 import "./DeliveryTrackerGraph.css";
 import {
@@ -8,7 +8,7 @@ import {
   LinearScale,
   BarElement,
   Title,
-  Tooltip as ChartTooltip,
+  Tooltip as ChartTooltip, // Aliasing Tooltip
   Legend,
 } from "chart.js";
 
@@ -25,16 +25,32 @@ const DeliveryTrackerChart = () => {
       if (data) {
         console.log("Fetched Data: ", data); // Logging data to verify format
 
-        // Prepare data for the chart
-        const techNames = Object.keys(data); // Technicians' names
-        const orderCounts = Object.values(data); // Order counts
+        // Excluded locations list
+        const excludedNames = [
+          "1318 Grand Lake Rd", "35 Rue Court", "454 KING GEORGE HWY",
+          "55 Expansion Ave", "875 Bayside Drive Unit 3", "70 Assomption Bvd.",
+          "1318 Grand Lake Road", "70 Assomption Blvd", "Acadian Peninsula (Caraquet)",
+          "454 King George Hwy", "70 Assomption blvd", "106 Whalen Street",
+          "2978 Rte 132", "875 Bayside Drive", "EDI Inc", "TRAN NF1_Newfoundland Warehouse",
+          "Virtual Location", "1595 North Service Rd E CTDI", "MICHAEL BARNED", "246 Church St"
+        ];
+
+        // Filter out excluded names
+        const filteredData = Object.entries(data)
+          .filter(([name]) => !excludedNames.includes(name)) // Remove excluded names
+          .reduce((acc, [name, value]) => {
+            acc[name] = value;
+            return acc;
+          }, {});
+
+        console.log("Filtered Data:", filteredData); // Debugging log
 
         setChartData({
-          labels: techNames, // Technician names as chart labels
+          labels: Object.keys(filteredData), // Tech names as labels
           datasets: [
             {
               label: "Total Orders", // Chart label
-              data: orderCounts, // Order counts as data
+              data: Object.values(filteredData).map(Number), // Convert values to numbers
               backgroundColor: "rgba(75, 192, 192, 0.6)", // Bar color
               borderColor: "rgba(75, 192, 192, 1)",
               borderWidth: 1,
@@ -54,7 +70,7 @@ const DeliveryTrackerChart = () => {
     plugins: {
       title: {
         display: true,
-        text: 'Delivery Tracker - Total Orders',
+        text: "Delivery Tracker - Total Orders",
       },
       tooltip: {
         callbacks: {

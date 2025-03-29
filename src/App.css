@@ -202,7 +202,12 @@ body {
   justify-content: space-around;
   height: 50vh; 
 }
-
+.content-waybills {
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-around;
+  margin-top: 5vh;
+}
 .stats-bubble {
   width: 45%;
   height: 100%;
@@ -211,8 +216,8 @@ body {
   border-radius: 10px;
 }
 .big-graph-bubble {
-  width: 90%;
-  height: 100%;
+  width: 45%;
+  height: 50vh;
   background-color: white;
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
   border-radius: 10px;

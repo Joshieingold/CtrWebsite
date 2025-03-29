@@ -5,6 +5,7 @@ import logo from "./assets/logo.png";
 import { fetchCTRReports } from "./CtrPage/api";
 import CTRBarChart from "./CTRBarChart";
 import DeliveryTrackerGraph from "./DeliveryTrackerGraph";
+import TotalDevicesChart from "./TotalDevicesChart";
 
 const CTRs = [
   { number: "8052", name: "DHT Fredericton" },
@@ -124,9 +125,12 @@ const WaybillPage = () => {
   return (
     <div className="window">
       <Header />
-      <div className="content">
+      <div className="content-waybills">
         <div className="big-graph-bubble">
           <DeliveryTrackerGraph/>
+        </div>
+        <div className="big-graph-bubble">
+          <TotalDevicesChart/>
         </div>
         
 
