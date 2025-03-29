@@ -18,10 +18,10 @@ const TotalDevicesChart = () => {
   const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [locationFilters, setLocationFilters] = useState({
-    SaintJohn: true,
+    "Saint John": true, // Changed key to include space
     Moncton: true,
     Fredericton: true,
-    Misc: true,
+    Purolator: true,
   });
 
   useEffect(() => {
@@ -44,10 +44,10 @@ const TotalDevicesChart = () => {
           const isFredericton = locationLower.includes("fredericton");
 
           if (TotalDevices > 0 && (
-            (locationFilters.SaintJohn && isSaintJohn) ||
+            (locationFilters["Saint John"] && isSaintJohn) || // Updated to use the new key
             (locationFilters.Moncton && isMoncton) ||
             (locationFilters.Fredericton && isFredericton) ||
-            (locationFilters.Misc && !isSaintJohn && !isMoncton && !isFredericton)
+            (locationFilters.Purolator && !isSaintJohn && !isMoncton && !isFredericton)
           )) {
             devicesByTechnician[technician] = TotalDevices;
           }
@@ -95,8 +95,7 @@ const TotalDevicesChart = () => {
     responsive: true,
     plugins: {
       title: {
-        display: true,
-        text: "Total Devices Ordered Per Technician",
+        display: false,
       },
       tooltip: {
         callbacks: {
@@ -107,12 +106,7 @@ const TotalDevicesChart = () => {
       },
     },
     scales: {
-      x: {
-        title: {
-          display: true,
-          text: "Technician",
-        },
-      },
+      
       y: {
         title: {
           display: true,
@@ -125,10 +119,10 @@ const TotalDevicesChart = () => {
 
   return (
     <div className="chart-container">
-      <h2>Total Devices Ordered</h2>
+      <h2 className="title-text">Total Devices Ordered</h2>
 
       {/* Checkboxes for filtering */}
-      <div>
+      <div className="filter-section">
         {Object.keys(locationFilters).map((location) => (
           <label key={location} className="Checkbox-Text">
             <input

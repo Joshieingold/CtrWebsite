@@ -97,10 +97,8 @@ export const fetchCTRReports = async (ctrId) => {
 
     const querySnapshot = await getDocs(q);
 
-    console.log("Number of reports found:", querySnapshot.docs.length);
 
     if (querySnapshot.docs.length < 2) {
-      console.warn("Not enough reports found.");
       return null;
     }
 
@@ -110,7 +108,6 @@ export const fetchCTRReports = async (ctrId) => {
       priorReport: querySnapshot.docs[1].data(),
     };
   } catch (error) {
-    console.error("Error fetching CTR reports:", error);
     return null;
   }
 };
@@ -156,10 +153,8 @@ export const fetchDeviceQuantityData = async () => {
       techOrders[techName].TotalDevices += totalDevices;
     });
 
-    console.log("🔍 Fetched Device Quantity Data (After Filtering):", techOrders);
     return techOrders;
   } catch (error) {
-    console.error("❌ Error fetching delivery tracker data:", error);
     return {};
   }
 };
@@ -174,7 +169,6 @@ export const fetchDeliveryTrackerData = async () => {
     const querySnapshot = await getDocs(deliveryRef);
 
     if (querySnapshot.empty) {
-      console.warn("No delivery data found.");
       return null;
     }
 
@@ -195,14 +189,70 @@ export const fetchDeliveryTrackerData = async () => {
       techOrders[techName].TotalOrders += 1;
     });
 
-    console.log("Tech Orders Data:", techOrders);
     return techOrders;
   } catch (error) {
-    console.error("Error fetching delivery tracker data:", error);
     return null;
   }
 };
+export const fetchWaybillData = async () => {
+  try {
+    const deliveryRef = collection(db, "DeliveryTracker");
+    const querySnapshot = await getDocs(deliveryRef);
 
+    if (querySnapshot.empty) {
+      console.warn("⚠️ No delivery data found.");
+      return [];
+    }
+
+    const excludedNames = [
+      "1318 Grand Lake Rd", "35 Rue Court", "454 KING GEORGE HWY",
+      "55 Expansion Ave", "875 Bayside Drive Unit 3", "70 Assomption Bvd.",
+      "1318 Grand Lake Road", "70 Assomption Blvd", "Acadian Peninsula (Caraquet)",
+      "454 King George Hwy", "70 Assomption blvd", "106 Whalen Street",
+      "2978 Rte 132", "875 Bayside Drive", "EDI Inc", "TRAN NF1_Newfoundland Warehouse",
+      "Virtual Location", "1595 North Service Rd E CTDI", "MICHAEL BARNED", "246 Church St"
+    ];
+
+    let waybillData = {};
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      const techName = data.TechName?.trim() || "Unknown";
+      const location = data.Location?.trim() || "Misc";
+      const waybill = data.Waybill; // Getting Waybill for grouping
+      const boxes = data.Boxes; // Total number of boxes
+      const weight = data.Weight; // Total weight for the waybill
+
+      // Exclude specific TechNames
+      if (excludedNames.includes(techName)) return;
+
+      if (!waybill || !boxes || !weight) return;
+
+      // Initialize waybill entry if it doesn't exist
+      if (!waybillData[waybill]) {
+        waybillData[waybill] = { totalWeight: 0, totalBoxes: 0 };
+      }
+
+      // Add the values for the current waybill
+      waybillData[waybill].totalWeight += weight;
+      waybillData[waybill].totalBoxes += boxes;
+    });
+
+    console.log("🔍 Fetched Waybill Data (Grouped):", waybillData);
+
+    // Convert the grouped waybill data into a Treemap-friendly format
+    const treemapData = Object.keys(waybillData).map((waybill) => ({
+      name: waybill,
+      size: waybillData[waybill].totalBoxes,  // Using Boxes as size
+      totalWeight: waybillData[waybill].totalWeight,  // Display weight in tooltip
+    }));
+
+    return treemapData;
+  } catch (error) {
+    console.error("❌ Error fetching delivery tracker data:", error);
+    return [];
+  }
+};
 
 
 

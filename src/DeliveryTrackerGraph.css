@@ -1,4 +1,15 @@
-
+.chart-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
   .Checkbox-Text {
     color: black;
   }
+.title-text {
+    color: black;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}

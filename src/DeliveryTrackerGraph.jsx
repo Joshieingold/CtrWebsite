@@ -57,7 +57,6 @@ const DeliveryTrackerGraph= () => {
             return acc;
           }, {});
 
-        console.log("Filtered Data:", filteredData);
 
         setChartData({
           labels: Object.keys(filteredData),
@@ -88,8 +87,7 @@ const DeliveryTrackerGraph= () => {
     responsive: true,
     plugins: {
       title: {
-        display: true,
-        text: "Delivery Tracker - Total Orders",
+        display: false,
       },
       tooltip: {
         callbacks: {
@@ -100,12 +98,7 @@ const DeliveryTrackerGraph= () => {
       },
     },
     scales: {
-      x: {
-        title: {
-          display: true,
-          text: "Technician",
-        },
-      },
+      
       y: {
         title: {
           display: true,
@@ -118,7 +111,7 @@ const DeliveryTrackerGraph= () => {
 
   return (
     <div className="chart-container">
-      <h2>Delivery Tracker - Total Orders</h2>
+      <h2 className="title-text">Total Orders Requested</h2>
 
       {/* Checkbox Filters */}
       <div className="filter-section">
@@ -159,7 +152,7 @@ const DeliveryTrackerGraph= () => {
             checked={filters.misc}
             onChange={handleFilterChange}
           />
-          Purolator
+          Purolator   
         </label>
       </div>
 
