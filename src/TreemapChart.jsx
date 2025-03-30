@@ -30,15 +30,15 @@ const categorizeWaybill = (name) => {
   if (name?.startsWith("STJ")) return "Day&Ross Shipments";
   if (/^\d+$/.test(name)) return "Purolator Shipments";
   if (name?.includes("Pickup")) return "Pickup Orders";
-  return "Other"; // Default category
+  return "Pickup Orders"; // Default category
 };
 
 // Function to get color for each group
 const getColor = (category) => {
   const colorMap = {
-    "Day&Ross Shipments": "#ff7300",  // Orange
-    "Purolator Shipments": "#8884d8", // Blue
-    "Pickup Orders": "#ff0000", // Red
+    "Day&Ross Shipments": "rgba(230, 124, 25, 0.83)",  // Orange
+    "Purolator Shipments": "rgba(31, 181, 201, 0.83)", // Blue
+    "Pickup Orders": "rgba(212, 24, 56, 0.83)", // Red
     "Other": "#00C49F" // Green
   };
   return colorMap[category] || "#000000";
@@ -82,7 +82,7 @@ const WaybillTreemap = () => {
           name: "Waybills",
           children: Object.keys(groupedData).map((category) => ({
             name: category,
-            children: groupedData[category]
+            children: groupedData[category],
           })),
         };
 
@@ -103,7 +103,7 @@ const WaybillTreemap = () => {
           data={treemapData.children}
           dataKey="size"
           stroke="#fff"
-          fill="#8884d8"
+          fill="rgba(255, 255, 255, 0)"
         >
           <Tooltip content={<CustomTooltip />} />
         </Treemap>
