@@ -6,7 +6,7 @@ import { fetchCTRReports } from "./CtrPage/api";
 import CTRBarChart from "./CTRBarChart";
 import DeliveryTrackerGraph from "./DeliveryTrackerGraph";
 import TotalDevicesChart from "./TotalDevicesChart";
-import TreemapChart from "./TreemapChart";
+import WaybillTreemap from "./TreemapChart";
 
 const CTRs = [
   { number: "8052", name: "DHT Fredericton" },
@@ -124,7 +124,7 @@ const HomePage = () => {
 const WaybillPage = () => {
 
   return (
-    <div className="window">
+    <div className="window-waybills">
       <Header />
       <div className="content-waybills">
         <div className="big-graph-bubble">
@@ -136,7 +136,8 @@ const WaybillPage = () => {
       </div>
       <div className="content-big">
         <h2>Orders Grouping</h2>
-        <TreemapChart/>
+        
+        <WaybillTreemap/>
       </div>
     </div>
   );

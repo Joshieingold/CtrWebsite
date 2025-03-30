@@ -10,10 +10,16 @@ body {
   flex-direction: column;
   height: 100%;
   width: 100vw;
+
+}
+.window-waybills {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100vw;
   justify-content: center;
   align-items: center;
 }
-
 /* Header styling */
 .header {
   display: flex;

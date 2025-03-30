@@ -1,0 +1,36 @@
+.Data-Container {
+    display: flex;
+    flex-direction: row;
+    
+    width: 95%;
+    
+}
+.small-graph-bubble {
+    display: flex;
+    justify-content: center;
+    height: 30%;
+    width: 15vw;
+    background-color: white;
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    overflow: hidden; 
+    margin-left: 5%;
+    transition: 0.5s;
+    flex-direction: column;
+    align-items: center;
+}
+.small-graph-bubble:hover {
+    transform: translateY(-5px);
+    transition: 0.5s;
+}
+.Tree {
+    margin-bottom: 5px;
+    border-radius: 0.8rem;
+    overflow: hidden;
+}
+.Data-Breakdown {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}

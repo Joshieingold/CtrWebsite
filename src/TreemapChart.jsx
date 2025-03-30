@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchWaybillData } from "./CtrPage/api.jsx";
 import { Treemap, ResponsiveContainer, Tooltip } from "recharts";
+import "./TreemapChart.css"
 
 // Custom Tooltip
 const CustomTooltip = ({ active, payload }) => {
@@ -26,17 +27,17 @@ const CustomTooltip = ({ active, payload }) => {
 
 // Function to group waybills by type
 const categorizeWaybill = (name) => {
-  if (name?.startsWith("STJ")) return "STJ Shipments";
-  if (/^\d+$/.test(name)) return "Numeric Waybills";
-  if (name?.includes("pickup")) return "Pickup Orders";
+  if (name?.startsWith("STJ")) return "Day&Ross Shipments";
+  if (/^\d+$/.test(name)) return "Purolator Shipments";
+  if (name?.includes("Pickup")) return "Pickup Orders";
   return "Other"; // Default category
 };
 
 // Function to get color for each group
 const getColor = (category) => {
   const colorMap = {
-    "STJ Shipments": "#ff7300",  // Orange
-    "Numeric Waybills": "#8884d8", // Blue
+    "Day&Ross Shipments": "#ff7300",  // Orange
+    "Purolator Shipments": "#8884d8", // Blue
     "Pickup Orders": "#ff0000", // Red
     "Other": "#00C49F" // Green
   };
@@ -45,6 +46,7 @@ const getColor = (category) => {
 
 const WaybillTreemap = () => {
   const [treemapData, setTreemapData] = useState([]);
+  const [categoryStats, setCategoryStats] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
@@ -64,6 +66,17 @@ const WaybillTreemap = () => {
           return acc;
         }, {});
 
+        // Calculate statistics for each category
+        const totalBoxes = data.reduce((sum, item) => sum + (item.size || 1), 0);
+        const stats = Object.keys(groupedData).map((category) => {
+          const categoryBoxes = groupedData[category].reduce((sum, item) => sum + item.size, 0);
+          return {
+            name: category,
+            percentage: ((categoryBoxes / totalBoxes) * 100).toFixed(2),
+            totalBoxes: categoryBoxes,
+          };
+        });
+
         // Convert grouped data into hierarchical structure
         const formattedData = {
           name: "Waybills",
@@ -75,6 +88,7 @@ const WaybillTreemap = () => {
 
         console.log("Grouped Treemap Data: ", formattedData);
         setTreemapData(formattedData);
+        setCategoryStats(stats);
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
@@ -83,16 +97,30 @@ const WaybillTreemap = () => {
   }, []);
 
   return (
-    <ResponsiveContainer width="100%" height="100%">
-      <Treemap
-        data={treemapData.children}
-        dataKey="size"
-        stroke="#fff"
-        fill="#8884d8"
-      >
-        <Tooltip content={<CustomTooltip />} />
-      </Treemap>
-    </ResponsiveContainer>
+    <div className="Data-Container">
+      <ResponsiveContainer className="Tree" width="100%" height={600}>
+        <Treemap
+          data={treemapData.children}
+          dataKey="size"
+          stroke="#fff"
+          fill="#8884d8"
+        >
+          <Tooltip content={<CustomTooltip />} />
+        </Treemap>
+      </ResponsiveContainer>
+      <div className="Data-Breakdown"> 
+        {categoryStats.map((stat) => (
+          <div className="small-graph-bubble" key={stat.name}>
+            <h3>{stat.name}</h3>
+            <div>
+              <p>{stat.percentage}% of orders</p>
+              <p>{stat.totalBoxes} Boxes Sent</p>
+            </div>
+            
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 
