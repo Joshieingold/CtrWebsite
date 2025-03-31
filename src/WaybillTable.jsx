@@ -96,17 +96,6 @@ const WaybillTable = () => {
           />
         </div>
 
-        <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
-          <div className="date-container">
-            <p>From Date:</p>
-            <input type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
-          </div>
-          <div className="date-container">
-            <p>To Date:</p>
-            <input type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} />
-          </div>
-        </div>
-
         <div className="date-container">
           <p>Filter by Location:</p>
           <select
@@ -121,6 +110,18 @@ const WaybillTable = () => {
             <option value="Other">Other</option>
           </select>
         </div>
+                <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
+          <div className="date-container">
+            <p>From Date:</p>
+            <input type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
+          </div>
+          <div className="date-container">
+            <p>To Date:</p>
+            <input type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} />
+          </div>
+        </div>
+
+
       </div>
 
       <div style={{ width: "100%", overflowX: "auto" }}>
