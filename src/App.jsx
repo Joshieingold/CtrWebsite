@@ -142,6 +142,8 @@ import { db } from "./CtrPage/firebase.jsx"; // Ensure your Firebase config is s
 import { collection, getDocs, query, where, orderBy, limit } from "firebase/firestore";
 
 
+
+
 const SubmitWaybillDataPage = () => {
   const initialFormData = {
     Boxes: "",
@@ -153,10 +155,35 @@ const SubmitWaybillDataPage = () => {
     Devices: [{ name: "", quantity: "" }],
   };
 
+  const [techOptions, setTechOptions] = useState([]);
+  const [techMap, setTechMap] = useState({});
   const [formData, setFormData] = useState(initialFormData);
   const [skids, setSkids] = useState(0);
   const [deviceOptions, setDeviceOptions] = useState([]);
   const [deviceFullBoxMap, setDeviceFullBoxMap] = useState({});
+
+  useEffect(() => {
+    const fetchTechs = async () => {
+      try {
+        const techRef = collection(db, "TechDatabase");
+        const querySnapshot = await getDocs(techRef);
+        const techs = {};
+        const techNames = [];
+
+        querySnapshot.docs.forEach(doc => {
+          const data = doc.data();
+          techs[data.Name] = data.Location || ""; // Default Location to empty if missing
+          techNames.push(data.Name);
+        });
+
+        setTechOptions(techNames);
+        setTechMap(techs);
+      } catch (error) {
+        console.error("Error fetching techs:", error);
+      }
+    };
+    fetchTechs();
+  }, []);
 
   useEffect(() => {
     const fetchDevices = async () => {
@@ -165,13 +192,13 @@ const SubmitWaybillDataPage = () => {
         const querySnapshot = await getDocs(deviceRef);
         const devices = {};
         const deviceNames = [];
-        
+
         querySnapshot.docs.forEach(doc => {
           const data = doc.data();
-          devices[data.Name] = data.FullBox || 10; // Default FullBox to 1 if not provided
+          devices[data.Name] = data.FullBox || 10;
           deviceNames.push(data.Name);
         });
-        
+
         setDeviceOptions(deviceNames);
         setDeviceFullBoxMap(devices);
       } catch (error) {
@@ -184,18 +211,18 @@ const SubmitWaybillDataPage = () => {
   useEffect(() => {
     const calculateBoxes = () => {
       let totalBoxFraction = 0;
-  
+
       formData.Devices.forEach(({ name, quantity }) => {
         const fullBox = deviceFullBoxMap[name] || 10;
         if (quantity) {
-          totalBoxFraction += quantity / fullBox; // Keep fractions
+          totalBoxFraction += quantity / fullBox;
         }
       });
-  
-      const totalBoxes = Math.ceil(totalBoxFraction); // Round up only at the end
+
+      const totalBoxes = Math.ceil(totalBoxFraction);
       setFormData(prev => ({ ...prev, Boxes: totalBoxes }));
     };
-  
+
     calculateBoxes();
   }, [formData.Devices, deviceFullBoxMap]);
 
@@ -206,6 +233,15 @@ const SubmitWaybillDataPage = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleTechChange = (e) => {
+    const value = e.target.value;
+    setFormData((prev) => ({
+      ...prev,
+      techname: value,
+      Location: techMap[value] || prev.Location, // Autofill Location if name exists
+    }));
   };
 
   const handleDeviceChange = (index, field, value) => {
@@ -240,7 +276,7 @@ const SubmitWaybillDataPage = () => {
   return (
     <div className="window-submit">
       <Header />
-      <WaybillNav/>
+      <WaybillNav />
       <form onSubmit={handleSubmit} className="form-container">
         <h3 className="StatTitle">Manual Submit</h3>
         <label>
@@ -261,7 +297,19 @@ const SubmitWaybillDataPage = () => {
         </label>
         <label>
           Tech Name:
-          <input type="text" name="techname" value={formData.techname} onChange={handleChange} className="input-field" />
+          <input
+            list="tech-options"
+            type="text"
+            name="techname"
+            value={formData.techname}
+            onChange={handleTechChange}
+            className="input-field"
+          />
+          <datalist id="tech-options">
+            {techOptions.map((techName, idx) => (
+              <option key={idx} value={techName} />
+            ))}
+          </datalist>
         </label>
         <label>
           Waybill:
@@ -280,7 +328,7 @@ const SubmitWaybillDataPage = () => {
                 onChange={(e) => handleDeviceChange(index, "name", e.target.value)}
                 className="input-field"
               />
-              <datalist id={`device-options-${index}`}>
+              < datalist id={`device-options-${index}`}>
                 {deviceOptions.map((deviceName, idx) => (
                   <option key={idx} value={deviceName} />
                 ))}
@@ -306,6 +354,7 @@ const SubmitWaybillDataPage = () => {
     </div>
   );
 };
+
 
 
 
