@@ -9,6 +9,7 @@ import TotalDevicesChart from "./TotalDevicesChart";
 import WaybillTreemap from "./TreemapChart";
 import WaybillTable from "./WaybillTable";
 
+
 const CTRs = [
   { number: "8052", name: "DHT Fredericton" },
   { number: "8067", name: "DHT Moncton" },
@@ -34,6 +35,7 @@ const Header = () => (
     </div>
   </div>
 );
+
 
 const SelectionBox = ({ selectedCtr, setSelectedCtr }) => (
   <div className="selection-box">
@@ -86,7 +88,14 @@ const CtrBanner = ({ selectedCtr }) => {
     </div>
   );
 };
-
+const WaybillNav = () => {
+  return (
+    <div className="waybill-nav">
+      <Link to="/Waybill" className="link-button">Statistics</Link>
+      <Link to="/Submit" className="link-button">Submit Orders</Link>
+    </div>
+  );
+}
 const OverviewContainer = ({ selectedCtr }) => (
   <div className="overview-container">
     <div className="big-panel-container">
@@ -122,16 +131,207 @@ const HomePage = () => {
     </div>
   );
 };
+
+
+
+
+
+
+
+import { db } from "./CtrPage/firebase.jsx"; // Ensure your Firebase config is set up
+import { collection, getDocs, query, where, orderBy, limit } from "firebase/firestore";
+
+
+const SubmitWaybillDataPage = () => {
+  const initialFormData = {
+    Boxes: "",
+    DateCompleted: "",
+    Location: "",
+    OrderID: "",
+    techname: "",
+    waybill: "",
+    Devices: [{ name: "", quantity: "" }],
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
+  const [skids, setSkids] = useState(0);
+  const [deviceOptions, setDeviceOptions] = useState([]);
+  const [deviceFullBoxMap, setDeviceFullBoxMap] = useState({});
+
+  useEffect(() => {
+    const fetchDevices = async () => {
+      try {
+        const deviceRef = collection(db, "DeviceDatabase");
+        const querySnapshot = await getDocs(deviceRef);
+        const devices = {};
+        const deviceNames = [];
+        
+        querySnapshot.docs.forEach(doc => {
+          const data = doc.data();
+          devices[data.Name] = data.FullBox || 10; // Default FullBox to 1 if not provided
+          deviceNames.push(data.Name);
+        });
+        
+        setDeviceOptions(deviceNames);
+        setDeviceFullBoxMap(devices);
+      } catch (error) {
+        console.error("Error fetching devices:", error);
+      }
+    };
+    fetchDevices();
+  }, []);
+
+  useEffect(() => {
+    const calculateBoxes = () => {
+      let totalBoxFraction = 0;
+  
+      formData.Devices.forEach(({ name, quantity }) => {
+        const fullBox = deviceFullBoxMap[name] || 10;
+        if (quantity) {
+          totalBoxFraction += quantity / fullBox; // Keep fractions
+        }
+      });
+  
+      const totalBoxes = Math.ceil(totalBoxFraction); // Round up only at the end
+      setFormData(prev => ({ ...prev, Boxes: totalBoxes }));
+    };
+  
+    calculateBoxes();
+  }, [formData.Devices, deviceFullBoxMap]);
+
+  useEffect(() => {
+    setSkids((parseFloat(formData.Boxes) || 0) / 24);
+  }, [formData.Boxes]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleDeviceChange = (index, field, value) => {
+    const updatedDevices = [...formData.Devices];
+    updatedDevices[index][field] = value;
+    setFormData((prev) => ({ ...prev, Devices: updatedDevices }));
+  };
+
+  const addDevice = () => {
+    setFormData((prev) => ({
+      ...prev,
+      Devices: [...prev.Devices, { name: "", quantity: "" }],
+    }));
+  };
+
+  const removeDevice = (index) => {
+    if (formData.Devices.length > 1) {
+      setFormData((prev) => {
+        const updatedDevices = prev.Devices.filter((_, i) => i !== index);
+        return { ...prev, Devices: updatedDevices };
+      });
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Form Submitted", { ...formData, Skids: skids });
+    setFormData(initialFormData);
+    setSkids(0);
+  };
+
+  return (
+    <div className="window-submit">
+      <Header />
+      <WaybillNav/>
+      <form onSubmit={handleSubmit} className="form-container">
+        <h3 className="StatTitle">Manual Submit</h3>
+        <label>
+          Boxes:
+          <input type="number" name="Boxes" value={formData.Boxes} onChange={handleChange} className="input-field" />
+        </label>
+        <label>
+          Date Completed:
+          <input type="date" name="DateCompleted" value={formData.DateCompleted} onChange={handleChange} className="input-field" />
+        </label>
+        <label>
+          Location:
+          <input type="text" name="Location" value={formData.Location} onChange={handleChange} className="input-field" />
+        </label>
+        <label>
+          Order ID:
+          <input type="text" name="OrderID" value={formData.OrderID} onChange={handleChange} className="input-field" />
+        </label>
+        <label>
+          Tech Name:
+          <input type="text" name="techname" value={formData.techname} onChange={handleChange} className="input-field" />
+        </label>
+        <label>
+          Waybill:
+          <input type="text" name="waybill" value={formData.waybill} onChange={handleChange} className="input-field" />
+        </label>
+
+        <div className="devices-container">
+          <strong className="text">Devices:</strong>
+          {formData.Devices.map((device, index) => (
+            <div key={index} className="device-entry">
+              <input
+                list={`device-options-${index}`}
+                type="text"
+                placeholder="Device Name"
+                value={device.name}
+                onChange={(e) => handleDeviceChange(index, "name", e.target.value)}
+                className="input-field"
+              />
+              <datalist id={`device-options-${index}`}>
+                {deviceOptions.map((deviceName, idx) => (
+                  <option key={idx} value={deviceName} />
+                ))}
+              </datalist>
+              <input
+                type="number"
+                placeholder="Quantity"
+                value={device.quantity}
+                onChange={(e) => handleDeviceChange(index, "quantity", e.target.value)}
+                className="input-field"
+              />
+              <button type="button" onClick={() => removeDevice(index)} className="remove-button">-</button>
+            </div>
+          ))}
+          <button type="button" onClick={addDevice} className="add-button">+ Add Device</button>
+        </div>
+
+        <div className="skids-display">
+          <strong>Skids:</strong> {skids}
+        </div>
+        <button type="submit" className="submit-button">Submit</button>
+      </form>
+    </div>
+  );
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const WaybillPage = () => {
 
   return (
     <div className="window-waybills">
       <Header />
-      <div className="content-big">
-        <WaybillTable/>
-
-      </div>
-        <div className="content-waybills">
+      <WaybillNav/>
+      <div className="content-waybills">
         <div className="big-graph-bubble">
           <DeliveryTrackerGraph/>
         </div>
@@ -139,6 +339,11 @@ const WaybillPage = () => {
           <TotalDevicesChart/>
         </div>
       </div>
+      <div className="content-big">
+        <WaybillTable/>
+
+      </div>
+        
       <div className="content-big">
         <h2>Orders Grouping</h2>
         <WaybillTreemap/>
@@ -153,6 +358,7 @@ const App = () => (
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/Waybill" element={<WaybillPage/>}/> 
+      <Route path="/Submit" element={<SubmitWaybillDataPage/>}/>
     </Routes>
   </Router>
 );

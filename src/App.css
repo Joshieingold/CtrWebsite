@@ -196,7 +196,12 @@ body {
   background-color: #ddd;
   border-color: #001529;
 }
-
+.devices-container {
+  color: black;
+}
+.text {
+  color: black;
+}
 /* Overview container */
 .overview-container {
   display: flex;
@@ -214,7 +219,16 @@ body {
   display: flex;
   flex-grow: 1;
   margin-top: 5vh;
-  gap: 2%;
+  justify-content: space-between;
+  width: 90%;
+}
+.big-graph-bubble {
+  width: 43vw;
+  height: 60vh;
+  background-color: white;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  overflow: hidden;
 }
 .stats-bubble {
   width: 45%;
@@ -223,14 +237,106 @@ body {
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
   border-radius: 10px;
 }
-.big-graph-bubble {
-  width: 40vw;
-  height: 60vh;
-  background-color: white;
-  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
-  overflow: hidden;
+
+.custom-order-submit-panel {
+  display: flex;
+  flex-direction: column;
+  width: 25vw;
+  justify-content: left;
+  align-items: center;
 }
+.window-submit {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.form-container {
+  width: 100;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  color: black;
+}
+
+.input-field {
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: rgb(237, 237, 237);
+  color: black;
+}
+
+.skids-display {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+  color: black;
+}
+
+.submit-button {
+  padding: 10px;
+  background-color: #f5f5f5;
+  color: black;
+  font-size: 16px;
+  border: 1px solid rgb(181, 181, 181);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #8bb2db;
+  color: white;
+}
+
+.waybill-nav {
+  background-color: white;
+  height: 5vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.link-button {
+  border-radius: 0.1rem;
+    
+    color: #000000c5;
+    border-bottom: 1px solid #188fff00;
+    height: 50%;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+.link-button:hover {
+
+  border-color: #001529;
+  color: #1890FF;
+  border-bottom: 1px solid #1890FF;
+}
+
 .content-big {
   width: 90%;
   height: 100%;
