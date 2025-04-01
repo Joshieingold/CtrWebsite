@@ -140,6 +140,7 @@ const HomePage = () => {
 
 import { db } from "./CtrPage/firebase.jsx"; // Ensure your Firebase config is set up
 import { collection, getDocs, query, where, orderBy, limit } from "firebase/firestore";
+import OrderReviewPanel from "./OrderReviewPanel.jsx";
 
 
 
@@ -277,6 +278,7 @@ const SubmitWaybillDataPage = () => {
     <div className="window-submit">
       <Header />
       <WaybillNav />
+      <div className="content">
       <form onSubmit={handleSubmit} className="form-container">
         <h3 className="StatTitle">Manual Submit</h3>
         <label>
@@ -351,6 +353,9 @@ const SubmitWaybillDataPage = () => {
         </div>
         <button type="submit" className="submit-button">Submit</button>
       </form>
+      <OrderReviewPanel/>
+      </div>
+      
     </div>
   );
 };
