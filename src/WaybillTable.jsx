@@ -29,20 +29,37 @@ const WaybillTable = () => {
 
         querySnapshot.forEach((doc) => {
           const data = doc.data();
-          const dateCompleted = data.DateCompleted?.toDate();
+          const dateCompleted = data.DateCompleted;
+        
           if (excludedNames.includes(data.TechName)) return;
-
+        
+          // Initialize locationCategory
+          let locationCategory = "Other"; // Default value
+        
           // Determine Location Category
-          let locationCategory = "Other";
-          if (data.Location?.includes("Saint John")) locationCategory = "Saint John";
-          else if (data.Location?.includes("Moncton")) locationCategory = "Moncton";
-          else if (data.Location?.includes("Fredericton")) locationCategory = "Fredericton";
-
+          if (data.Location?.includes("Saint John")) {
+            locationCategory = "Saint John";
+          } else if (data.Location?.includes("Moncton")) {
+            locationCategory = "Moncton";
+          } else if (data.Location?.includes("Fredericton")) {
+            locationCategory = "Fredericton";
+          }
+        
+          // Convert Firestore timestamp to Date object if necessary
+          let dateCompletedValue;
+          if (dateCompleted instanceof Date) {
+            dateCompletedValue = dateCompleted;
+          } else if (dateCompleted && dateCompleted.toDate) {
+            dateCompletedValue = dateCompleted.toDate(); // Convert Firestore timestamp to Date
+          } else {
+            dateCompletedValue = null; // Handle cases where dateCompleted is not valid
+          }
+        
           waybillData.push({
             waybill: data.Waybill || "Unknown",
             boxes: data.Boxes || 0,
             weight: data.Weight || 0,
-            date: dateCompleted ? dateCompleted.toISOString().split("T")[0] : "N/A",
+            date: dateCompletedValue ? dateCompletedValue.toISOString().split("T")[0] : "N/A",
             Technician: data.TechName || "Unknown Tech",
             Location: locationCategory, // Store categorized location
           });
